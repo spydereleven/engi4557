@@ -1,0 +1,1 @@
+OPTS=-g -Wall

@@ -6,8 +6,9 @@ class ScopedPtr
 {
   public:
     ScopedPtr(T* ptr, bool is_array = false)
-        : _ptr(ptr), _is_array(is_array)
+        : _is_array(is_array)
     {
+      _ptr = ptr;
     }
 
     ~ScopedPtr()
