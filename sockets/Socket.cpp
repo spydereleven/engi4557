@@ -17,14 +17,21 @@ Socket::Socket(int fd)
   _fd = fd;
 }
 
+/*
 Socket::Socket(Socket const& socket)
 {
   _fd = socket.fd();
 }
+*/
 
 Socket::~Socket()
 {
-  close(_fd);
+  close();
+}
+
+void Socket::close()
+{
+  ::close(_fd);
 }
 
 int Socket::recv(char *buffer, const int length)
@@ -37,7 +44,11 @@ int Socket::recv(char *buffer, const int length)
     // Read from socket
     bytesRead = ::recv(_fd, &buffer[length - bytesRemaining], bytesRemaining, 0);
 
-    if (bytesRead <= 0)
+    if (bytesRead < 0)
+    {
+      throw std::runtime_error(strerror(errno));
+    }
+    else if (bytesRead == 0)
     {
       throw std::runtime_error("Remote side disconnected.");
     }
@@ -51,22 +62,26 @@ int Socket::recv(char *buffer, const int length)
 
 int Socket::send(const char *buffer, const int length)
 {
-  int bytesRead = 0;
+  int bytesSent = 0;
   int bytesRemaining = length;
 
   do
   {
     // Send over socket
-    bytesRead = ::send(_fd, &buffer[length - bytesRemaining], bytesRemaining, 0);
+    bytesSent = ::send(_fd, &buffer[length - bytesRemaining], bytesRemaining, 0);
 
-    if (bytesRead <= 0)
+    if (bytesSent < 0)
+    {
+      throw std::runtime_error(strerror(errno));
+    }
+    else if (bytesSent == 0)
     {
       throw std::runtime_error("Remote side disconnected.");
     }
 
-    bytesRemaining -= bytesRead;
+    bytesRemaining -= bytesSent;
 
-  } while(bytesRead > 0 && bytesRemaining > 0);
+  } while(bytesSent > 0 && bytesRemaining > 0);
 
   return length - bytesRemaining;
 }

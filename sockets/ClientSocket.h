@@ -1,17 +1,15 @@
 #ifndef __CLIENTSOCKET_H__
 #define __CLIENTSOCKET_H__
 
-#include <string>
-#include <sstream>
-
 #include "Socket.h"
+#include "IClientSocket.h"
 
-class ClientSocket : public Socket
+class ClientSocket : public Socket, public IClientSocket
 {
   public:
     virtual ~ClientSocket();
 
-    void connect(std::string const &address, const unsigned short port);
+    virtual void connect(std::string const &address, const unsigned short port);
 };
 
 #endif

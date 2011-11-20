@@ -32,7 +32,7 @@ void ServerSocket::bind(std::string const &address, const unsigned short port)
   }
 }
 
-Socket* ServerSocket::accept()
+ISocket* ServerSocket::accept()
 {
   int client_fd;
   struct sockaddr_storage their_addr;

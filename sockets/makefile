@@ -2,16 +2,29 @@ include ../makefile.inc
 
 default : all
 
-all : Socket.o ServerSocket.o ClientSocket.o
+all : Socket.o ServerSocket.o ClientSocket.o SecureSocket.o SecureServerSocket.o SecureClientSocket.o 
 
-Socket.o : Socket.h Socket.cpp
+# Normal sockets
+
+Socket.o : ISocket.h Socket.h Socket.cpp
 	g++ $(OPTS) -c Socket.cpp
 
-ServerSocket.o : Socket.o ServerSocket.h ServerSocket.cpp
+ServerSocket.o : ISocket.h IServerSocket.h ServerSocket.h ServerSocket.cpp
 	g++ $(OPTS) -c ServerSocket.cpp
-
-ClientSocket.o : Socket.o ClientSocket.h ClientSocket.cpp
+ 
+ClientSocket.o : IClientSocket.h ClientSocket.h ClientSocket.cpp
 	g++ $(OPTS) -c ClientSocket.cpp
+
+# Secure Sockets
+
+SecureSocket.o : ISocket.h SecureSocket.h SecureSocket.cpp
+	g++ $(OPTS) -c SecureSocket.cpp
+
+SecureServerSocket.o : IServerSocket.h SecureServerSocket.h SecureServerSocket.cpp
+	g++ $(OPTS) -c SecureServerSocket.cpp
+
+SecureClientSocket.o : IClientSocket.h SecureClientSocket.h SecureClientSocket.cpp
+	g++ $(OPTS) -c SecureClientSocket.cpp
 
 .PHONY : all clean
 
