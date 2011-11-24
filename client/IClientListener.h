@@ -3,7 +3,7 @@
 
 #include <string>
 
-class IMessageListener
+class IClientListener
 {
 public:
     virtual void onMessageReceived(std::string message) = 0;
