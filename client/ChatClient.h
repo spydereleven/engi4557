@@ -1,6 +1,8 @@
 #ifndef __CHATCLIENT_H__
 #define __CHATCLIENT_H__
 
+#include "IMessageListener.h"
+
 class ChatClient 
 {
   public:
@@ -19,12 +21,6 @@ class ChatClient
   private:
     std::list<IMessageListener> _messageListeners;
 
-};
-
-class IMessageListener
-{
-  public:
-    virtual void onMessageReceived(std::string message) = 0;
 };
 
 #endif
