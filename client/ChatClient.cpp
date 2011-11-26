@@ -4,10 +4,10 @@
 #define PORT = 1234;
 #define KEYPATH = "somepath";
 #define MAX_MESSAGE_TYPE = 255;
-#define PART = '/part';
-#define SAYROOM = '/say';
-#define MSGUSER = '/msg';
-#define LISTUSERS = '/list';
+#define PART = "/part";
+#define SAYROOM = "/say";
+#define MSGUSER = "/msg";
+#define LISTUSERS = "/list";
 
 
 ChatClient();
@@ -71,7 +71,7 @@ void ChatClient::getRoomList()
 void ChatClient::getRoomUserList(std::string roomname)
 {
 	std::string listcmd = "/list ";
-	_clientSocket->send(listcmd, listcmd.length());
+	_clientSocket->send(listcmd.c_str(), listcmd.length());
 	_clientSocket->send(roomname, roomname.length());
 }
 
@@ -83,13 +83,13 @@ void ChatClient::registerMessageListener(std::IClientListener* listener)
 
 void ChatClient::unregisterListener(std::IClientListener* listener)
 {
-	ChatClient::_clientListeners.pop_front(slistener);
+	ChatClient::_clientListeners.pop_front(listener);
 }
 
 void ChatClient::readUntil(ISocket* socket, char untilThis, int maxLength)
 {
 	int bytesRead = 0;
-	char buffer = '\0';
+	char buffer = ' ';
 	std::stringstream ss; 
 	
 	for (bytesRead = 0; bytesRead < maxLength; bytesRead++)
@@ -117,29 +117,64 @@ void ChatClient::waitForServerMessage()
 {    
 	std::string message;
 	
-	message = readUntil(_clientSocket, ' ', MAX_MESSAGE_TYPE)
+	message = readUntil(_clientSocket, buffer, MAX_MESSAGE_TYPE);
 	
-	switch (message)
+	int messagenum = 0;
+	
+	if (message = "/part")
 	{
-			case PART:
+		
+		messagenum = 1;
+		
+	}
+	
+	else if (message = "/list)
+			 
+	{
+	
+		messagenum = 2;
+	
+	}
+	
+			 
+	else if (message = "/say")
+			 
+	{
+	
+		messagenum = 3;
+		
+	}
+	
+	else if (message = "/msg")
+			 
+	{
+	
+		messagenum = 4;
+		
+	}
+	
+			 
+	switch (messagenum)
+	{
+			case 1:
 			
 			partHandler();
 			
 			break;
 			
-			case LISTUSERS:
+			case 2:
 			
 			listUsersHandler();
 			
 			break;
 			
-			case SAYROOM:
+			case 3:
 			
 			sayRoomHandler();
 			
 			break;
 			
-			case MSGUSER:
+			case 4:
 			
 			msgUserHandler();
 			
@@ -152,27 +187,31 @@ void ChatClient::waitForServerMessage()
 void partHandler()
 {
 
-	
+	std::string roomname = readUntil(_clientSocket, " ", roomname);
+	std::string reason = readUntil(_clientSocket, "/0", reasonmsg);
 	
 }
 
 void listUsersHandler()
 {
 
-	
+	readUntil(_clientSocket, " ", );
 	
 }
 	
 void sayRoomHandler()
 {
 
-	
+	std::string roomname = readUntil(_clientSocket, " ", room);
+	std::string username = readUntil(_clientSocket, " ", user);
+	std::string message = readUntil(_clientSocket, "/0", sayToRoom);
 	
 }
 
 void msgUserHandler()
 {
 
-	
+	std::string username = readUntil(_clientSocket, " ", user);
+	std::string message = readUntil(_clientSocket, "/0",msgToUser);
 
 }
